@@ -35,6 +35,7 @@ App(
     apptype=FlipperAppType.METAPACKAGE,
     provides=[
         "music_player",
+        "APPS_MouseJiggler",
         "snake_game",
         "bt_hid",
     ],
