@@ -1,5 +1,6 @@
 #include "gui/canvas.h"
 #include "gui_i.h"
+#include <assets_icons.h>
 
 #define TAG "GuiSrv"
 
@@ -322,7 +323,9 @@ void gui_add_view_port(Gui* gui, ViewPort* view_port, GuiLayer layer) {
     furi_check(layer < GuiLayerMAX);
     // Only fullscreen supports Vertical orientation for now
     furi_assert(
-        (layer == GuiLayerFullscreen) || (view_port->orientation != ViewPortOrientationVertical));
+        (layer == GuiLayerFullscreen) ||
+        ((view_port->orientation != ViewPortOrientationVertical) &&
+         (view_port->orientation != ViewPortOrientationVerticalFlip)));
 
     gui_lock(gui);
     // Verify that view port is not yet added
@@ -433,7 +436,7 @@ void gui_add_framebuffer_callback(Gui* gui, GuiCanvasCommitCallback callback, vo
     const CanvasCallbackPair p = {callback, context};
 
     gui_lock(gui);
-    furi_assert(CanvasCallbackPairArray_count(gui->canvas_callback_pair, p) == 0);
+    furi_assert(!CanvasCallbackPairArray_count(gui->canvas_callback_pair, p));
     CanvasCallbackPairArray_push_back(gui->canvas_callback_pair, p);
     gui_unlock(gui);
 
